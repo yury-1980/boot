@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: HousePerson
+      changes:
+        - sqlFile:
+            path: /db/changelog/createTable.sql
+        - sqlFile:
+            path: /db/changelog/house.sql
+        - sqlFile:
+            path: /db/changelog/person.sql
+        - sqlFile:
+            path: /db/changelog/person_house.sql
