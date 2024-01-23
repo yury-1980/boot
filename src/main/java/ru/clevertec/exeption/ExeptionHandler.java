@@ -16,7 +16,7 @@ public class ExeptionHandler {
         return new ResponseEntity<>(messageResponse, HttpStatus.NOT_FOUND);
     }
 
-//    @ExceptionHandler
+    @ExceptionHandler
     public ResponseEntity<MessageResponse> hendlerExeption(Exception exception) {
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.setInfo(exception.getMessage());

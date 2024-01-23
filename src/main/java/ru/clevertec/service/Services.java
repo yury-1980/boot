@@ -7,9 +7,11 @@ public interface Services<T, U> {
 
     List<U> findByAll(int pageNumber, int pageSize);
 
-    U findByUUID(UUID uuid) throws Throwable;
+    U findByUUID(UUID uuid);
 
     void update(T t, UUID uuid);
+
+    U updatePatch(T t, UUID uuid);
 
     void delete(UUID uuid);
 }

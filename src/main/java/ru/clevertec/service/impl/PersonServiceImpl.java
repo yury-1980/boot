@@ -1,96 +1,133 @@
 package ru.clevertec.service.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.dto.requestDTO.RequestPersonDTO;
+import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
+import ru.clevertec.entity.Person;
+import ru.clevertec.exeption.EntityNotFoundExeption;
+import ru.clevertec.mapper.HouseMapper;
+import ru.clevertec.mapper.PersonMapper;
+import ru.clevertec.repository.HouseRepository;
+import ru.clevertec.repository.PersonRepository;
 import ru.clevertec.service.PersonService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 @Transactional(readOnly = true)
 public class PersonServiceImpl implements PersonService {
-    @Override
-    public void create(RequestPersonDTO requestPersonDTO, UUID uuid) {
 
-    }
+    private HouseRepository houseRepository;
+    private PersonRepository personRepository;
+    private PersonMapper personMapper;
+    private HouseMapper houseMapper;
 
     @Override
     public List<ResponsePersonDTO> findByAll(int pageNumber, int pageSize) {
-        return null;
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+
+        return personRepository.findAll(pageRequest).stream()
+                .map(person -> personMapper.toResponsePersonDto(person))
+                .toList();
     }
 
     @Override
-    public ResponsePersonDTO findByUUID(UUID uuid) throws Throwable {
-        return null;
+    public ResponsePersonDTO findByUUID(UUID uuid) {
+        return personRepository.findByUuid(uuid)
+                .map(person -> personMapper.toResponsePersonDto((Person) person))
+                .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
     }
 
     @Override
+    public List<ResponseHouseDTO> getHousesByOwner(UUID personUuid) {
+        personRepository.findByUuid(personUuid)
+                .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
+
+        return personRepository.findByUuidOwnerAndHousesList(personUuid).stream()
+                .map(house -> houseMapper.toResponseHouseDTO(house))
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void create(RequestPersonDTO requestPersonDTO, UUID uuid) {
+        houseRepository.findByUuid(uuid).ifPresent(house -> {
+            Person person = personMapper.toPerson(requestPersonDTO);
+            person.setUuid(UUID.randomUUID());
+            person.setCreateDate(LocalDateTime.now());
+            person.setUpdateDate(person.getCreateDate());
+            person.setHouseResident(house);
+            personRepository.save(person);
+        });
+    }
+
+    @Override
+    @Transactional
     public void update(RequestPersonDTO requestPersonDTO, UUID uuid) {
-
+        personRepository.findByUuid(uuid).ifPresent(person -> {
+            person.setName(requestPersonDTO.getName());
+            person.setSurname(requestPersonDTO.getSurname());
+            person.setSex(requestPersonDTO.getSex());
+            person.setPassportSeries(requestPersonDTO.getPassportSeries());
+            person.setPassportNumber(requestPersonDTO.getPassportNumber());
+            person.setUpdateDate(LocalDateTime.now());
+            personRepository.save(person);
+        });
     }
 
     @Override
-    public void delete(UUID uuid) {
+    @Transactional
+    public ResponsePersonDTO updatePatch(RequestPersonDTO requestPersonDTO, UUID uuid) {
 
+        Person oldPerson = personRepository.findByUuid(uuid)
+                .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
+
+        if (requestPersonDTO.getName() != null) {
+            oldPerson.setName(requestPersonDTO.getName());
+            updateDate(oldPerson);
+        }
+
+        if (requestPersonDTO.getSurname() != null) {
+            oldPerson.setSurname(requestPersonDTO.getSurname());
+            updateDate(oldPerson);
+        }
+
+        if (requestPersonDTO.getSex() != null) {
+            oldPerson.setSex(requestPersonDTO.getSex());
+            updateDate(oldPerson);
+        }
+
+        if (requestPersonDTO.getPassportSeries() != null) {
+            oldPerson.setPassportSeries(requestPersonDTO.getPassportSeries());
+            updateDate(oldPerson);
+        }
+
+        if (requestPersonDTO.getPassportNumber() != null) {
+            oldPerson.setPassportNumber(requestPersonDTO.getPassportNumber());
+            updateDate(oldPerson);
+        }
+
+        return personMapper.toResponsePersonDto(personRepository.save(oldPerson));
     }
 
+    @Override
+    @Transactional
+    public void delete(UUID uuid) {
+        personRepository.findByUuid(uuid)
+                .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
+        personRepository.deleteByUuid(uuid);
+    }
 
-//
-//    private Repository<House> houseRepository;
-//    private Repository<Person> repository;
-//    private PersonMapper mapper;
-//
-//    @Override
-//    public List<ResponsePersonDTO> findByAll(int pageNumber, int pageSize) {
-//        return repository.findByAll(pageNumber, pageSize).stream()
-//                .map(person -> mapper.toResponsePersonDto((Person) person))
-//                .toList();
-//    }
-//
-//    @Override
-//    public ResponsePersonDTO findByUUID(UUID uuid) throws Throwable {
-//        return repository.findByUUID(uuid)
-//                .map(person -> mapper.toResponsePersonDto((Person) person))
-//                .orElseThrow(() -> new EntityNotFoundExeption("Object not found", UUID.class));
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void create(RequestPersonDTO requestPersonDTO, UUID uuid) {
-//        houseRepository.findByUUID(uuid).ifPresent(house -> {
-//            Person person = mapper.toPerson(requestPersonDTO);
-//            person.setUuid(UUID.randomUUID());
-//            person.setCreateDate(LocalDateTime.now());
-//            person.setUpdateDate(person.getCreateDate());
-//            person.setHouse(house);
-//            repository.update(person);
-//        });
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void update(RequestPersonDTO requestPersonDTO, UUID uuid) {
-//        repository.findByUUID(uuid).ifPresent(person -> {
-//            person.setName(requestPersonDTO.getName());
-//            person.setSurname(requestPersonDTO.getSurname());
-//            person.setSex(requestPersonDTO.getSex());
-//            person.setPassportSeries(requestPersonDTO.getPassportSeries());
-//            person.setPassportNumber(requestPersonDTO.getPassportNumber());
-//            person.setUpdateDate(LocalDateTime.now());
-//
-//            repository.update(person);
-//        });
-//
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void delete(UUID uuid) {
-//        repository.delete(uuid);
-//    }
+    private void updateDate(Person person) {
+        person.setUpdateDate(LocalDateTime.now());
+    }
 }

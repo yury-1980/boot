@@ -1,9 +1,12 @@
 package ru.clevertec.Controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.dto.requestDTO.RequestHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
+import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
 import ru.clevertec.service.HouseService;
 
 import java.util.List;
@@ -17,30 +20,57 @@ public class HouseController {
     private HouseService services;
 
     @GetMapping
-    public List<ResponseHouseDTO> getAllHouse(@RequestParam(defaultValue = "0") int pageNumber,
-                                              @RequestParam(defaultValue = "15") int pageSize) {
-        return services.findByAll(pageNumber, pageSize);
+    public ResponseEntity<List<ResponseHouseDTO>> getAllHouse(@RequestParam(defaultValue = "0") int pageNumber,
+                                                              @RequestParam(defaultValue = "15") int pageSize) {
+        return ResponseEntity.ok(services.findByAll(pageNumber, pageSize));
     }
 
     @GetMapping("/{uuid}")
-    public ResponseHouseDTO getHouse(@PathVariable("uuid") UUID uuid) throws Throwable {
+    public ResponseEntity<ResponseHouseDTO> getHouse(@PathVariable("uuid") UUID uuid) throws Throwable {
 
-        return services.findByUUID(uuid);
+        return ResponseEntity.ok(services.findByUUID(uuid));
+    }
+
+    @GetMapping("/persons/{uuid}")
+    public ResponseEntity<List<ResponsePersonDTO>> getHousePersons(@PathVariable("uuid") UUID uuid) {
+
+        return ResponseEntity.ok(services.getPersonsByHouse(uuid));
     }
 
     @PostMapping
-    public UUID create(@RequestBody RequestHouseDTO requestHouseDTO) {
+    public ResponseEntity<UUID> createHouse(@RequestBody RequestHouseDTO requestHouseDTO) {
 
-        return services.create(requestHouseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(services.create(requestHouseDTO));
+    }
+
+    @PostMapping("/owners")
+    public ResponseEntity<Void> createHouseAndOwner(@RequestParam UUID house, @RequestParam UUID person) {
+        services.createHouseAndOwner(house, person);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .build();
     }
 
     @PutMapping("/{uuid}")
-    public void update(@RequestBody RequestHouseDTO requestHouseDTO, @PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<Void> updateHouse(@RequestBody RequestHouseDTO requestHouseDTO, @PathVariable("uuid") UUID uuid) {
         services.update(requestHouseDTO, uuid);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .build();
+    }
+
+    @PatchMapping("/{uuid}")
+    public ResponseEntity<ResponseHouseDTO> updatePatcHouse(@RequestBody RequestHouseDTO requestHouseDTO, @PathVariable("uuid") UUID uuid) {
+
+        return ResponseEntity.ok(services.updatePatch(requestHouseDTO, uuid));
     }
 
     @DeleteMapping("/{uuid}")
-    public void delete(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<Void> deleteHouse(@PathVariable("uuid") UUID uuid) {
         services.delete(uuid);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
     }
 }
