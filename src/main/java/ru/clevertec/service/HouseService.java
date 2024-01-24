@@ -17,4 +17,6 @@ public interface HouseService extends Services<RequestHouseDTO, ResponseHouseDTO
     void createHouseAndOwner(UUID house, UUID person);
 
     List<ResponsePersonDTO> getPersonsByHouse(UUID houseUuid);
+
+//    ResponseHouseDTO updatePatch(RequestHouseDTO requestHouseDTO, UUID uuid, UUID person);
 }

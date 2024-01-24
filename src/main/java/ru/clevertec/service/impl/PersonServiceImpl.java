@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.dto.requestDTO.RequestPersonDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
+import ru.clevertec.entity.House;
 import ru.clevertec.entity.Person;
 import ru.clevertec.exeption.EntityNotFoundExeption;
 import ru.clevertec.mapper.HouseMapper;
@@ -18,6 +19,7 @@ import ru.clevertec.service.PersonService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -86,10 +88,11 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    public ResponsePersonDTO updatePatch(RequestPersonDTO requestPersonDTO, UUID uuid) {
+    public ResponsePersonDTO updatePatch(RequestPersonDTO requestPersonDTO, UUID personUuid, UUID houseUuid) {
 
-        Person oldPerson = personRepository.findByUuid(uuid)
+        Person oldPerson = personRepository.findByUuid(personUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
+        Optional<House> house = houseRepository.findByUuid(houseUuid);
 
         if (requestPersonDTO.getName() != null) {
             oldPerson.setName(requestPersonDTO.getName());
@@ -115,6 +118,8 @@ public class PersonServiceImpl implements PersonService {
             oldPerson.setPassportNumber(requestPersonDTO.getPassportNumber());
             updateDate(oldPerson);
         }
+
+        house.ifPresent(oldPerson::setHouseResident);
 
         return personMapper.toResponsePersonDto(personRepository.save(oldPerson));
     }

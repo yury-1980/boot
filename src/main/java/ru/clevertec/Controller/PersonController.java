@@ -53,10 +53,11 @@ public class PersonController {
                 .build();
     }
 
-    @PatchMapping("/{uuid}")
-    public ResponseEntity<ResponsePersonDTO> updatePatchPerson(@RequestBody RequestPersonDTO requestPersonDTO, @PathVariable("uuid") UUID uuid) {
+    @PatchMapping
+    public ResponseEntity<ResponsePersonDTO> updatePatchPerson(@RequestBody RequestPersonDTO requestPersonDTO,
+                                                               @RequestParam UUID person, @RequestParam UUID house) {
 
-        return ResponseEntity.ok(services.updatePatch(requestPersonDTO, uuid));
+        return ResponseEntity.ok(services.updatePatch(requestPersonDTO, person, house));
     }
 
     @DeleteMapping("/{uuid}")

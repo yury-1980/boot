@@ -14,4 +14,6 @@ public interface PersonService extends Services<RequestPersonDTO, ResponsePerson
     void create(RequestPersonDTO requestPersonDTO, UUID uuid);
 
     List<ResponseHouseDTO> getHousesByOwner(UUID personUuid);
+
+//    ResponsePersonDTO updatePatch(RequestPersonDTO requestPersonDTO, UUID uuid);// TODO: 24-01-2024: удалить
 }

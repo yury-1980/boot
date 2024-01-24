@@ -4,16 +4,18 @@ databaseChangeLog:
       author: HousePerson
       changes:
         - sqlFile:
-            path: /db/changelog/createTable.sql
+            path: /db/v0.0/ddl/createTable.sql
         - sqlFile:
-            path: /db/changelog/house.sql
+            path: /db/v0.0/dml/house.sql
         - sqlFile:
-            path: /db/changelog/person.sql
+            path: /db/v0.0/dml/person.sql
         - sqlFile:
-            path: /db/changelog/person_house.sql
+            path: /db/v0.0/dml/person_house.sql
   - changeSet:
       id: 2
       author: Yuri
       changes:
         - sqlFile:
-            path: /db/changelog/createHouseHistiry.sql
+              path: /db/v0.0/ddl/createTableHouseHistory.sql
+        - sqlFile:
+            path: /db/v0.0/ddl/createTriggerHouseHistiry.sql

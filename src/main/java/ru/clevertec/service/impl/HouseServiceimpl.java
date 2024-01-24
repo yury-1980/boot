@@ -9,6 +9,7 @@ import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
 import ru.clevertec.entity.House;
 import ru.clevertec.entity.Person;
+import ru.clevertec.exeption.EntityAlreadyExists;
 import ru.clevertec.exeption.EntityNotFoundExeption;
 import ru.clevertec.mapper.HouseMapper;
 import ru.clevertec.mapper.PersonMapper;
@@ -94,8 +95,11 @@ public class HouseServiceimpl implements HouseService {
 
     @Override
     @Transactional
-    public ResponseHouseDTO updatePatch(RequestHouseDTO requestHouseDTO, UUID uuid) {
-        House oldHouse = houseRepository.findByUuid(uuid)
+    public ResponseHouseDTO updatePatch(RequestHouseDTO requestHouseDTO, UUID houseUUID, UUID personUUID) {
+        House oldHouse = houseRepository.findByUuid(houseUUID)
+                .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
+
+        Person person = personRepository.findByUuid(personUUID)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
 
         if (requestHouseDTO.getArea() != null) {
@@ -116,6 +120,13 @@ public class HouseServiceimpl implements HouseService {
 
         if (requestHouseDTO.getNumber() != null) {
             oldHouse.setNumber(requestHouseDTO.getNumber());
+        }
+
+        if (oldHouse.getOwnersList().contains(person)) {
+            throw EntityAlreadyExists.of(person.getClass());
+
+        } else {
+            oldHouse.getOwnersList().add(person);
         }
 
         return houseMapper.toResponseHouseDTO(houseRepository.save(oldHouse));

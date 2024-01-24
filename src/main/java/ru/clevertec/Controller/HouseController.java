@@ -61,11 +61,11 @@ public class HouseController {
                 .build();
     }
 
-    @PatchMapping("/{uuid}")
+    @PatchMapping
     public ResponseEntity<ResponseHouseDTO> updatePatcHouse(@RequestBody RequestHouseDTO requestHouseDTO,
-                                                            @PathVariable("uuid") UUID uuid) {
+                                                            @RequestParam UUID house, @RequestParam UUID person) {
 
-        return ResponseEntity.ok(services.updatePatch(requestHouseDTO, uuid));
+        return ResponseEntity.ok(services.updatePatch(requestHouseDTO, house, person));
     }
 
     @DeleteMapping("/{uuid}")
