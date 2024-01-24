@@ -3,6 +3,7 @@ package ru.clevertec.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.clevertec.entity.type.Sex;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

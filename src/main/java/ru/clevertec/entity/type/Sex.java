@@ -1,4 +1,4 @@
-package ru.clevertec.entity;
+package ru.clevertec.entity.type;
 
 public enum Sex {
 

@@ -2,6 +2,7 @@ package ru.clevertec.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.clevertec.entity.type.PersonType;
 
 import java.time.LocalDate;
 

@@ -53,7 +53,8 @@ public class HouseController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Void> updateHouse(@RequestBody RequestHouseDTO requestHouseDTO, @PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<Void> updateHouse(@RequestBody RequestHouseDTO requestHouseDTO,
+                                            @PathVariable("uuid") UUID uuid) {
         services.update(requestHouseDTO, uuid);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -61,7 +62,8 @@ public class HouseController {
     }
 
     @PatchMapping("/{uuid}")
-    public ResponseEntity<ResponseHouseDTO> updatePatcHouse(@RequestBody RequestHouseDTO requestHouseDTO, @PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<ResponseHouseDTO> updatePatcHouse(@RequestBody RequestHouseDTO requestHouseDTO,
+                                                            @PathVariable("uuid") UUID uuid) {
 
         return ResponseEntity.ok(services.updatePatch(requestHouseDTO, uuid));
     }

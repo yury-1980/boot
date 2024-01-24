@@ -52,7 +52,7 @@ public class HouseServiceimpl implements HouseService {
     public List<ResponsePersonDTO> getPersonsByHouse(UUID houseUuid) {
         houseRepository.findByUuid(houseUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
-        return houseRepository.findByUuidAndResidentsList(houseUuid).stream()
+        return personRepository.findByUuidAndResidentsList(houseUuid).stream()
                 .map(person -> personMapper.toResponsePersonDto(person))
                 .toList();
     }

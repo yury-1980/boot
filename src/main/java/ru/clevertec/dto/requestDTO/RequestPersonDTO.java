@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ru.clevertec.entity.House;
-import ru.clevertec.entity.Sex;
+import ru.clevertec.entity.type.Sex;
 import ru.clevertec.util.ConstFormatDate;
 
 import java.time.LocalDateTime;

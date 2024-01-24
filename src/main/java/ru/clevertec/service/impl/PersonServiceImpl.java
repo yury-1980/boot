@@ -52,7 +52,7 @@ public class PersonServiceImpl implements PersonService {
         personRepository.findByUuid(personUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
 
-        return personRepository.findByUuidOwnerAndHousesList(personUuid).stream()
+        return houseRepository.findByUuidOwnerAndHousesList(personUuid).stream()
                 .map(house -> houseMapper.toResponseHouseDTO(house))
                 .toList();
     }

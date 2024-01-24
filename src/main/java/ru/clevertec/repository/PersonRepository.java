@@ -3,7 +3,6 @@ package ru.clevertec.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.clevertec.entity.House;
 import ru.clevertec.entity.Person;
 
 import java.util.List;
@@ -16,6 +15,6 @@ public interface PersonRepository extends JpaRepository<Person, UUID> {
 
     void deleteByUuid(UUID uuid);
 
-    @Query("SELECT h FROM House h JOIN h.ownersList o WHERE o.uuid = :uuid")
-    List<House> findByUuidOwnerAndHousesList(@Param("uuid") UUID personUuid);
+    @Query("SELECT p FROM Person p LEFT JOIN p.houseResident h WHERE h.uuid = :uuid")
+    List<Person> findByUuidAndResidentsList(@Param("uuid") UUID houseUuid);
 }

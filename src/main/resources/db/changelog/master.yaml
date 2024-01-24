@@ -11,3 +11,9 @@ databaseChangeLog:
             path: /db/changelog/person.sql
         - sqlFile:
             path: /db/changelog/person_house.sql
+  - changeSet:
+      id: 2
+      author: Yuri
+      changes:
+        - sqlFile:
+            path: /db/changelog/createHouseHistiry.sql
