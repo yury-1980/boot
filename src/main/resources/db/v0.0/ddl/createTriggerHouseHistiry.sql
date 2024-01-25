@@ -19,15 +19,20 @@ EXECUTE PROCEDURE tenant_history_trigger();
 
 CREATE OR REPLACE FUNCTION owner_history_trigger() RETURNS TRIGGER AS
 '
-BEGIN
-    IF TG_OP = ''UPDATE'' OR TG_OP = ''INSERT'' THEN
-        IF NEW.person_id IS DISTINCT FROM OLD.person_id THEN
-            INSERT INTO house_history(date, type, house_id, person_id)
-            VALUES (CURRENT_DATE, ''OWNER'', new.house_id, new.person_id);
+    BEGIN
+        IF TG_OP = ''UPDATE'' OR TG_OP = ''INSERT'' THEN
+            IF NEW.person_id IS DISTINCT FROM OLD.person_id THEN
+                IF NOT EXISTS (SELECT 1
+                               FROM house_history
+                               WHERE house_id = NEW.house_id
+                                 AND person_id = NEW.person_id) THEN
+                    INSERT INTO house_history(date, type, house_id, person_id)
+                    VALUES (CURRENT_DATE, ''OWNER'', new.house_id, new.person_id);
+                END IF;
+            END IF;
         END IF;
-    END IF;
-    RETURN new;
-END;
+        RETURN new;
+    END;
 ' LANGUAGE plpgsql;
 
 CREATE TRIGGER owner_history_update

@@ -49,11 +49,16 @@ public class HouseServiceimpl implements HouseService {
 
     }
 
+    /**
+     * Выбирает всех жильцов, по uuid House.
+     * @param houseUuid uuid дома(House).
+     * @return List<dto> жильцов (residents).
+     */
     @Override
     public List<ResponsePersonDTO> getPersonsByHouse(UUID houseUuid) {
         houseRepository.findByUuid(houseUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
-        return personRepository.findByUuidAndResidentsList(houseUuid).stream()
+        return personRepository.findPersonByHouseResidentUuid(houseUuid).stream()
                 .map(person -> personMapper.toResponsePersonDto(person))
                 .toList();
     }
@@ -93,6 +98,14 @@ public class HouseServiceimpl implements HouseService {
         });
     }
 
+    /**
+     * Метод изменяет все параметры House
+     *
+     * @param requestHouseDTO тело запроса на изменение характеристик House.
+     * @param houseUUID UUID дома в БД.
+     * @param personUUID UUID Person который будет владельцем дома (Owner).
+     * @return DTO дома.
+     */
     @Override
     @Transactional
     public ResponseHouseDTO updatePatch(RequestHouseDTO requestHouseDTO, UUID houseUUID, UUID personUUID) {

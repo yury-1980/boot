@@ -36,7 +36,7 @@ public class RequestPersonDTO {
     private LocalDateTime updateDate;
 
     @Builder.Default
-    private List<House> houseList = new ArrayList<>();
+    private List<House> housesOwner = new ArrayList<>();
 
     @Builder.Default
     private House house = new House();

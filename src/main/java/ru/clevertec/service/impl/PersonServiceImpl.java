@@ -49,12 +49,18 @@ public class PersonServiceImpl implements PersonService {
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
     }
 
+    /**
+     * Получение всех текущих домов у заданного владельца.
+     *
+     * @param personUuid uuid человека(владельца). owner.
+     * @return List<dto> домов.
+     */
     @Override
     public List<ResponseHouseDTO> getHousesByOwner(UUID personUuid) {
         personRepository.findByUuid(personUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
 
-        return houseRepository.findByUuidOwnerAndHousesList(personUuid).stream()
+        return houseRepository.findHousesByOwnersListUuid(personUuid).stream()
                 .map(house -> houseMapper.toResponseHouseDTO(house))
                 .toList();
     }

@@ -11,7 +11,7 @@ public interface Services<T, U> {
 
     void update(T t, UUID uuid);
 
-    U updatePatch(T t, UUID personUuid, UUID houseUuid); // TODO: 24-01-2024: удалить
+    U updatePatch(T t, UUID personUuid, UUID houseUuid);
 
     void delete(UUID uuid);
 }

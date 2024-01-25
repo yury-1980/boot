@@ -54,7 +54,7 @@ public class Person {
     @Builder.Default
     @ToString.Exclude
     @ManyToMany(mappedBy = "ownersList", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<House> houseList = new ArrayList<>();
+    private List<House> housesOwner = new ArrayList<>();
 
     @Builder.Default
     @ToString.Exclude

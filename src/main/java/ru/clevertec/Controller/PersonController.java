@@ -12,9 +12,9 @@ import ru.clevertec.service.PersonService;
 import java.util.List;
 import java.util.UUID;
 
-@RequestMapping("/persons")
-@AllArgsConstructor
 @RestController
+@AllArgsConstructor
+@RequestMapping("/persons")
 public class PersonController {
 
     private PersonService services;
@@ -32,9 +32,9 @@ public class PersonController {
     }
 
     @GetMapping("/houses/{uuid}")
-    public ResponseEntity<List<ResponseHouseDTO>> getHousesByOwner(@PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<List<ResponseHouseDTO>> getHousesByOwner(@PathVariable("uuid") UUID personUuid) {
 
-        return ResponseEntity.ok(services.getHousesByOwner(uuid));
+        return ResponseEntity.ok(services.getHousesByOwner(personUuid));
     }
 
     @PostMapping("/{uuid}")
