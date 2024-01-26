@@ -76,16 +76,14 @@ http://localhost:8080/houses/633677d4-32a4-4728-b298-bfd8bbae8445
 Запрос: POST http://localhost:8080/houses
 
 {
-"uuid": "99efee96-2f1c-459e-b97c-609f7399aa03",
-"area": "Some area",
-"country": "Some country",
-"city": "Some city",
-"street": "Some street",
-"number": 123,
-"createDate": "2024-01-12 23:29:04.595"
+    "area": "Some area",
+    "country": "Some country",
+    "city": "Some city",
+    "street": "Some street",
+    "number": 1234567
 }
 
-Ответ: "99efee96-2f1c-459e-b97c-609f7399aa03"
+Ответ: "bb0a883e-1576-4b85-b94c-cd93c240e9f7"
 
 5. addHouseOwner
 
