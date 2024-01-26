@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: HousePerson
+      changes:
+        - sqlFile:
+            path: /db/v0.0/ddl/createTable.sql
+        - sqlFile:
+            path: /db/v0.0/dml/house.sql
+        - sqlFile:
+            path: /db/v0.0/dml/person.sql
+        - sqlFile:
+            path: /db/v0.0/dml/person_house.sql
+  - changeSet:
+      id: 2
+      author: Yuri
+      changes:
+        - sqlFile:
+              path: /db/v0.0/ddl/createTableHouseHistory.sql
+        - sqlFile:
+            path: /db/v0.0/ddl/createTriggerHouseHistiry.sql
