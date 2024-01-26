@@ -64,6 +64,6 @@ public class Person {
 
     @ToString.Exclude
     @Builder.Default
-    @OneToMany(mappedBy = "person",fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<HouseHistory> personHistories = new ArrayList<>();
 }

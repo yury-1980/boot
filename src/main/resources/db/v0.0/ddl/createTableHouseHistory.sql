@@ -1,4 +1,4 @@
-DROP TYPE person_type;
+DROP TYPE IF EXISTS person_type;
 CREATE TYPE person_type AS ENUM ('OWNER', 'TENANT');
 
 CREATE TABLE IF NOT EXISTS house_history

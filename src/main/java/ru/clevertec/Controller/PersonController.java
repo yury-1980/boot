@@ -38,7 +38,8 @@ public class PersonController {
     }
 
     @PostMapping("/{uuid}")
-    public ResponseEntity<Void> createPerson(@RequestBody RequestPersonDTO requestPersonDTO, @PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<Void> createPerson(@RequestBody RequestPersonDTO requestPersonDTO,
+                                             @PathVariable("uuid") UUID uuid) {
         services.create(requestPersonDTO, uuid);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -46,7 +47,8 @@ public class PersonController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Void> updatePerson(@RequestBody RequestPersonDTO requestPersonDTO, @PathVariable("uuid") UUID uuid) {
+    public ResponseEntity<Void> updatePerson(@RequestBody RequestPersonDTO requestPersonDTO,
+                                             @PathVariable("uuid") UUID uuid) {
         services.update(requestPersonDTO, uuid);
 
         return ResponseEntity.status(HttpStatus.OK)

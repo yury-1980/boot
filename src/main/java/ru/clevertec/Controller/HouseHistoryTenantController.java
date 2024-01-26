@@ -19,8 +19,8 @@ public class HouseHistoryTenantController {
 
     private HouseHistoryTenantSrevice tenantSrevice;
 
-    @GetMapping
-    public ResponseEntity<List<ResponsePersonDTO>> findAllTenantsHouse(UUID houseUid) {
+    @GetMapping("{uuid}")
+    public ResponseEntity<List<ResponsePersonDTO>> findAllTenantsHouse(@PathVariable("uuid") UUID houseUid) {
         return ResponseEntity.ok(tenantSrevice.findAllTenantsHouse(houseUid));
     }
 

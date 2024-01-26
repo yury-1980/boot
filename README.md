@@ -1,19 +1,47 @@
-# hibernate
+# springBoot
 
-#### Подключить apache-tomcat-10.1.17
+#### 
+
+Описание: HouseHistory заполняется через 2 тригера.
 
 Примеры запросов:
 
 ### House
 
-1. getAllHouse
+1. GET getAllHouse
 
 Запрос:
-   http://localhost:8080/houses?pageNumber=3&pageSize=1
+http://localhost:8080/houses?pageNumber=0&pageSize=2
 
 Ответ:
 
 [
+{
+"uuid": "99efee95-2f1c-459e-b97c-509f7399aa01",
+"area": "Some area",
+"country": "Some country",
+"city": "Some city",
+"street": "Some street",
+"number": 123,
+"createDate": "2024-01-12 23:29:04.595"
+},
+{
+"uuid": "d7d5c085-d470-4f4b-8d3c-f04a1305d4ea",
+"area": "Some area",
+"country": "Some country",
+"city": "Some city",
+"street": "Some street",
+"number": 123,
+"createDate": "2024-01-13 01:26:12.411"
+}
+]
+
+2. GET getByUUID
+
+http://localhost:8080/houses/633677d4-32a4-4728-b298-bfd8bbae8445
+
+Ответ:
+
 {
 "uuid": "633677d4-32a4-4728-b298-bfd8bbae8445",
 "area": "Some area",
@@ -23,27 +51,29 @@
 "number": 123,
 "createDate": "2024-01-14 20:10:17.985"
 }
-]
 
-2. getUUID
+4. getAllResidentsByHouse
 
-Запрос: http://localhost:8080/houses/99efee95-2f1c-459e-b97c-509f7399aa01
+Запрос: GET http://localhost:8080/houses/persons/99efee95-2f1c-459e-b97c-509f7399aa01
 
 Ответ:
 
+[
 {
-"uuid": "99efee95-2f1c-459e-b97c-509f7399aa01",
-"area": "Some area",
-"country": "Some country",
-"city": "Some city",
-"street": "Some street",
-"number": 123,
-"createDate": "2024-01-12 23:29:04.595"
+"uuid": "d8b6eda1-2ac7-4190-8523-389b3cccffa9",
+"name": "John",
+"surname": "Doe",
+"sex": "MALE",
+"passportSeries": "HB",
+"passportNumber": 3,
+"createDate": "2024-01-12 23:29:04.595",
+"updateDate": "2024-01-12 23:29:04.595"
 }
+]
 
-3. addHouse
+4. addHouse
 
-Запрос: http://localhost:8080/houses
+Запрос: POST http://localhost:8080/houses
 
 {
 "uuid": "99efee96-2f1c-459e-b97c-609f7399aa03",
@@ -57,72 +87,68 @@
 
 Ответ: "99efee96-2f1c-459e-b97c-609f7399aa03"
 
-4. addHouse Copy
+5. addHouseOwner
 
-Запрос: http://localhost:8080/houses
+Запрос: POST
 
-{
-"uuid": "633677d4-32a4-4728-b298-bfd8bbae8445",
-"area": "Some area",
-"country": "Some country",
-"city": "Some city",
-"street": "Some street",
-"number": 123,
-"createDate": "2024-01-14 20:10:17.985",
-"ownerList": [
-{
-"uuid": "f4036a98-9fe6-4b85-bf89-3342807872c2",
-"name": "John",
-"surname": "Doe",
-"sex": "Male",
-"passportSeries": "AB",
-"passportNumber": 123456,
-"createDate": "2024-01-14 20:10:17.988",
-"updateDate": "2024-01-14 20:10:17.988",
-"house": {
-"uuid": "99efee95-2f1c-459e-b97c-519f7399aa03",
-"area": "Homelska area",
-"country": "Belarus country",
-"city": "Homel city",
-"street": "Sovet street",
-"number": 123,
-"createDate": "2024-01-12 23:29:04.595"
-}
-}
-]
-}
+http://localhost:8080/houses/owners?house=99efee95-2f1c-459e-b97c-509f7399aa01&person=d8b6eda1-2ac7-4190-8523-389b3cccff10
 
-Ответ: "633677d4-32a4-4728-b298-bfd8bbae8455"
+6. deleteHouse
 
-5. deleteHouse
+Запрос: DEL
 
-Запрос:
+http://localhost:8080/houses/633677d4-32a4-4728-b298-bfd8bbae8445
 
-http://localhost:8080/houses/633677d4-31a4-4728-b298-bfd8bbae8446 
+7. updateHouse
 
-6. updateHouse
+Запрос: PUT
 
-Запрос: http://localhost:8080/houses/99efee95-2f1c-459e-b97c-509f7399aa01
+http://localhost:8080/houses/d7d5c085-d470-4f4b-8d3c-f04a1305d4ea
 
 {
-"uuid": "99efee95-2f1c-459e-b97c-509f7399aa01",
 "area": "Gomelskay area",
 "country": "Some country",
 "city": "Gomel city",
-"street": "Some street",
-"number": 10,
-"createDate": "2024-01-12 23:29:04.595"
+"street": "Som street",
+"number": 1234
 }
 
 Ответ:
 
 Не возвращал. Но обновление происходит с оставлением старого ID, но перемещается в конец таблицы.
 
+8. updateHouse Copy
+
+Запрос: PATCH 
+
+http://localhost:8080/houses?house=633677d4-32a4-4728-b298-bfd8bbae8445&person=374e13db-4bc9-41a4-a261-c3c3326622c9
+
+{
+"area": "Some area",
+"country": "Some country",
+"city": "Some city",
+"street": "Some street",
+"number": 123,
+"createDate": "2024-01-14 20:10:17.985"
+}
+
+Ответ: 
+
+{
+"uuid": "d7d5c085-d470-4f4b-8d3c-f04a1305d4ea",
+"area": "Some area111",
+"country": "Some country",
+"city": "Some city",
+"street": "Some street",
+"number": 123,
+"createDate": "2024-01-13 01:26:12.411"
+}
+
 ### Person
 
 1. getAllPerson
 
-Запрос: http://localhost:8080/persons?pageNumber=1&pageSize=3
+Запрос: GET http://localhost:8080/persons?pageNumber=0&pageSize=2
 
 Ответ:
 
@@ -131,7 +157,7 @@ http://localhost:8080/houses/633677d4-31a4-4728-b298-bfd8bbae8446
 "uuid": "d8b6eda1-2ac7-4190-8523-389b3cccffa9",
 "name": "John",
 "surname": "Doe",
-"sex": "Male",
+"sex": "MALE",
 "passportSeries": "HB",
 "passportNumber": 3,
 "createDate": "2024-01-12 23:29:04.595",
@@ -141,85 +167,114 @@ http://localhost:8080/houses/633677d4-31a4-4728-b298-bfd8bbae8446
 "uuid": "3cd20b71-6381-4658-9711-f834f1c3373a",
 "name": "John",
 "surname": "Doe",
-"sex": "Male",
+"sex": "MALE",
 "passportSeries": "HB",
 "passportNumber": 1,
 "createDate": "2024-01-13 01:26:12.411",
 "updateDate": "2024-01-13 01:26:12.411"
-},
-{
-"uuid": "f4036a98-9fe6-4b85-bf89-3342807872c2",
-"name": "John",
-"surname": "Doe",
-"sex": "Male",
-"passportSeries": "AB",
-"passportNumber": 123456,
-"createDate": "2024-01-14 20:10:17.988",
-"updateDate": "2024-01-14 20:10:17.988"
 }
 ]
 
 2. getUUIDPerson
 
-Запрос: http://localhost:8080/persons/d8b6eda1-2ac7-4190-8523-389b3cccffa9
+Запрос: GET http://localhost:8080/persons/d8b6eda1-2ac7-4190-8523-389b3cccff10
 
 Ответ:
+
 {
-"uuid": "d8b6eda1-2ac7-4190-8523-389b3cccffa9",
-"name": "John",
-"surname": "Doe",
-"sex": "Male",
+"uuid": "d8b6eda1-2ac7-4190-8523-389b3cccff10",
+"name": "Yury",
+"surname": "Petrov",
+"sex": "MALE",
 "passportSeries": "HB",
-"passportNumber": 3,
+"passportNumber": 5,
 "createDate": "2024-01-12 23:29:04.595",
 "updateDate": "2024-01-12 23:29:04.595"
 }
 
-3. addPerson
+3. GET getAllHousesByOwner
 
-Запрос: http://localhost:8080/persons
+Запрос:
+
+http://localhost:8080/persons/houses/d8b6eda1-2ac7-4190-8523-389b3cccffa9
 
 Ответ:
 
+[
 {
-"uuid": "d8b6eda1-2ac7-4190-8523-389b3cccff11",
-"name": "Yury",
-"surname": "Petrov",
-"sex": "Male",
-"passportSeries": "HB",
-"passportNumber": 5,
-"createDate": "2024-01-12 23:29:04.595",
-"updateDate": "2024-01-12 23:29:04.595",
-"house": {
-"uuid": "99efee95-2f1c-459e-b97c-509f7399aa03",
-"area": "Homelska area",
-"country": "Belarus country",
-"city": "Homel city",
-"street": "Sovet street",
+"uuid": "99efee95-2f1c-459e-b97c-509f7399aa01",
+"area": "Some area",
+"country": "Some country",
+"city": "Some city",
+"street": "Some street",
 "number": 123,
 "createDate": "2024-01-12 23:29:04.595"
 }
+]
+
+4. addPerson POST
+
+Запрос: http://localhost:8080/persons/99efee95-2f1c-459e-b97c-509f7399aa01
+
+{
+"name": "Yury9",
+"surname": "Petrov",
+"sex": "MALE",
+"passportSeries": "HB",
+"passportNumber": 32
 }
 
-4. deletePerson
+5. deletePerson DEL
 
-Запрос: http://localhost:8080/houses/633677d4-31a4-4728-b298-bfd8bbae8446
+http://localhost:8080/persons/47686e0c-ce10-40c4-b188-6f1e24434f59
 
-5. updatePerson
+Ответ:
+
+Нет или 
+
+{
+"info": "Object not found UUID"
+}
+
+6. updatePerson PUT
 
 Запрос:
 http://localhost:8080/persons/d8b6eda1-2ac7-4190-8523-389b3cccffa9
 
 {
-"uuid": "d8b6eda1-2ac7-4190-8523-389b3cccffa9",
-"name": "Masha",
-"surname": "Petrova",
-"sex": "Male",
+"name": "Masha4",
+"surname": "Петрова",
+"sex": "FEMALE",
 "passportSeries": "AA",
-"passportNumber": 3,
+"passportNumber": 7
+}
+
+Ответ: 
+Не возвращал. Но обновление происходит с оставлением старого ID, но перемещается в конец таблицы.
+
+7. updatePerson Copy PATCH
+
+Запрос: http://localhost:8080/persons?person=d8b6eda1-2ac7-4190-8523-389b3cccffa9&house=99efee95-2f1c-459e-b97c-719f7399aa25
+
+{
+"name": "Masha",
+"surname": "Petrova1",
+"sex": "MALE",
+"passportSeries": "AA",
+"passportNumber": 7,
 "createDate": "2024-01-12 23:29:04.595",
 "updateDate": "2024-01-12 23:29:04.595"
 }
 
 Ответ: 
-Не возвращал. Но обновление происходит с оставлением старого ID, но перемещается в конец таблицы.
+
+{
+"uuid": "d8b6eda1-2ac7-4190-8523-389b3cccffa9",
+"name": "Masha",
+"surname": "Petrova1",
+"sex": "MALE",
+"passportSeries": "AA",
+"passportNumber": 7,
+"createDate": "2024-01-12 23:29:04.595",
+"updateDate": "2024-01-26 03:49:43.641"
+}

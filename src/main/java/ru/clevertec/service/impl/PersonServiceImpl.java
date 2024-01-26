@@ -33,6 +33,13 @@ public class PersonServiceImpl implements PersonService {
     private PersonMapper personMapper;
     private HouseMapper houseMapper;
 
+    /**
+     * Выбор всех Persons из заданной страницы.
+     *
+     * @param pageNumber Номер страницы.
+     * @param pageSize   Размер страницы.
+     * @return List<ResponsePersonDTO> Persons, список.
+     */
     @Override
     public List<ResponsePersonDTO> findByAll(int pageNumber, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
@@ -42,6 +49,12 @@ public class PersonServiceImpl implements PersonService {
                 .toList();
     }
 
+    /**
+     * Выбор заданного Person, по его uuid.
+     *
+     * @param uuid UUID.
+     * @return ResponsePersonDTO.
+     */
     @Override
     public ResponsePersonDTO findByUUID(UUID uuid) {
         return personRepository.findByUuid(uuid)
@@ -65,10 +78,16 @@ public class PersonServiceImpl implements PersonService {
                 .toList();
     }
 
+    /**
+     * Создание Person и заселение в дом.
+     *
+     * @param requestPersonDTO RequestPersonDTO Person.
+     * @param houseUuid        House.
+     */
     @Override
     @Transactional
-    public void create(RequestPersonDTO requestPersonDTO, UUID uuid) {
-        houseRepository.findByUuid(uuid).ifPresent(house -> {
+    public void create(RequestPersonDTO requestPersonDTO, UUID houseUuid) {
+        houseRepository.findByUuid(houseUuid).ifPresent(house -> {
             Person person = personMapper.toPerson(requestPersonDTO);
             person.setUuid(UUID.randomUUID());
             person.setCreateDate(LocalDateTime.now());
@@ -78,10 +97,16 @@ public class PersonServiceImpl implements PersonService {
         });
     }
 
+    /**
+     * Обновление Person целеком.
+     *
+     * @param requestPersonDTO RequestPersonDTO Person.
+     * @param personUuid       UUID Person.
+     */
     @Override
     @Transactional
-    public void update(RequestPersonDTO requestPersonDTO, UUID uuid) {
-        personRepository.findByUuid(uuid).ifPresent(person -> {
+    public void update(RequestPersonDTO requestPersonDTO, UUID personUuid) {
+        personRepository.findByUuid(personUuid).ifPresent(person -> {
             person.setName(requestPersonDTO.getName());
             person.setSurname(requestPersonDTO.getSurname());
             person.setSex(requestPersonDTO.getSex());
@@ -92,6 +117,14 @@ public class PersonServiceImpl implements PersonService {
         });
     }
 
+    /**
+     * Обновление Person и смена жительства.
+     *
+     * @param requestPersonDTO RequestPersonDTO person
+     * @param personUuid       uuid person.
+     * @param houseUuid        uuid house.
+     * @return ResponsePersonDTO, Обновлённый Person.
+     */
     @Override
     @Transactional
     public ResponsePersonDTO updatePatch(RequestPersonDTO requestPersonDTO, UUID personUuid, UUID houseUuid) {
@@ -130,6 +163,11 @@ public class PersonServiceImpl implements PersonService {
         return personMapper.toResponsePersonDto(personRepository.save(oldPerson));
     }
 
+    /**
+     * Удаление Person по его UUID.
+     *
+     * @param uuid UUID Person.
+     */
     @Override
     @Transactional
     public void delete(UUID uuid) {
@@ -138,6 +176,11 @@ public class PersonServiceImpl implements PersonService {
         personRepository.deleteByUuid(uuid);
     }
 
+    /**
+     * Создание текущего времени и даты при обновлении Person.
+     *
+     * @param person обновляемый Person.
+     */
     private void updateDate(Person person) {
         person.setUpdateDate(LocalDateTime.now());
     }

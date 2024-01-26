@@ -8,6 +8,7 @@ import java.util.UUID;
 public interface HouseHistoryTenantSrevice {
 
     List<ResponsePersonDTO> findAllTenantsHouse(UUID houseUid);
+
     List<ResponsePersonDTO> findAllOwnersHouse(UUID houseUid);
 
 

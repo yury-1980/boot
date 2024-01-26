@@ -31,6 +31,13 @@ public class HouseServiceimpl implements HouseService {
     private HouseMapper houseMapper;
     private PersonMapper personMapper;
 
+    /**
+     * Выбор всех House из заданной страницы.
+     *
+     * @param pageNumber Номер страницы.
+     * @param pageSize   Размер страницы.
+     * @return List<ResponseHouseDTO>  Houses, список.
+     */
     @Override
     public List<ResponseHouseDTO> findByAll(int pageNumber, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
@@ -40,6 +47,12 @@ public class HouseServiceimpl implements HouseService {
                 .toList();
     }
 
+    /**
+     * Выбор заданного дома, по его uuid.
+     *
+     * @param uuid UUID.
+     * @return ResponseHouseDTO.
+     */
     @Override
     public ResponseHouseDTO findByUUID(UUID uuid) {
 
@@ -51,6 +64,7 @@ public class HouseServiceimpl implements HouseService {
 
     /**
      * Выбирает всех жильцов, по uuid House.
+     *
      * @param houseUuid uuid дома(House).
      * @return List<dto> жильцов (residents).
      */
@@ -63,6 +77,12 @@ public class HouseServiceimpl implements HouseService {
                 .toList();
     }
 
+    /**
+     * Создание дома.
+     *
+     * @param requestHouseDTO RequestHouseDTO.
+     * @return UUID созданного дома.
+     */
     @Override
     @Transactional
     public UUID create(RequestHouseDTO requestHouseDTO) {
@@ -73,8 +93,15 @@ public class HouseServiceimpl implements HouseService {
         return houseRepository.save(house).getUuid();
     }
 
+    /**
+     * Добавление владельца (Owner) дома.
+     *
+     * @param house  UUID House.
+     * @param person UUID Person.
+     */
     @Override
-    public void createHouseAndOwner(UUID house, UUID person) {
+    @Transactional
+    public void addOwnerInHouse(UUID house, UUID person) {
         House houseOwner = houseRepository.findByUuid(house)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
         Person owner = personRepository.findByUuid(person)
@@ -84,6 +111,12 @@ public class HouseServiceimpl implements HouseService {
 
     }
 
+    /**
+     * Обновление дома целеком.
+     *
+     * @param requestHouseDTO Обновлённый RequestHouseDTO.
+     * @param uuid            UUID дома.
+     */
     @Override
     @Transactional
     public void update(RequestHouseDTO requestHouseDTO, UUID uuid) {
@@ -102,8 +135,8 @@ public class HouseServiceimpl implements HouseService {
      * Метод изменяет все параметры House
      *
      * @param requestHouseDTO тело запроса на изменение характеристик House.
-     * @param houseUUID UUID дома в БД.
-     * @param personUUID UUID Person который будет владельцем дома (Owner).
+     * @param houseUUID       UUID дома в БД.
+     * @param personUUID      UUID Person который будет владельцем дома (Owner).
      * @return DTO дома.
      */
     @Override
@@ -145,6 +178,11 @@ public class HouseServiceimpl implements HouseService {
         return houseMapper.toResponseHouseDTO(houseRepository.save(oldHouse));
     }
 
+    /**
+     * Удаление дома по его UUID.
+     *
+     * @param uuid UUID.
+     */
     @Override
     @Transactional
     public void delete(UUID uuid) {
