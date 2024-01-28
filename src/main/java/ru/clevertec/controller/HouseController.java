@@ -1,4 +1,4 @@
-package ru.clevertec.Controller;
+package ru.clevertec.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class HouseController {
     }
 
     @PostMapping("/owners")
-    public ResponseEntity<Void> createHouseAndOwner(@RequestParam UUID house, @RequestParam UUID person) {
+    public ResponseEntity<Void> addHouseAndOwner(@RequestParam UUID house, @RequestParam UUID person) {
         services.addOwnerInHouse(house, person);
 
         return ResponseEntity.status(HttpStatus.CREATED)

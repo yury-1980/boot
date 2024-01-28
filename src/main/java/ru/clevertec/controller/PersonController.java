@@ -1,4 +1,4 @@
-package ru.clevertec.Controller;
+package ru.clevertec.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

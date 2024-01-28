@@ -2,6 +2,8 @@ package ru.clevertec.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import ru.clevertec.entity.type.PersonType;
 
 import java.time.LocalDate;
@@ -22,7 +24,7 @@ public class HouseHistory {
     private LocalDate date;
 
     @Column(name = "type")
-    @Enumerated(EnumType.STRING)
+    @JdbcType(PostgreSQLEnumJdbcType.class)
     private PersonType type;
 
     @Builder.Default

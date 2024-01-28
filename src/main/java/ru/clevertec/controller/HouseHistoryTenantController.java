@@ -1,12 +1,13 @@
-package ru.clevertec.Controller;
+package ru.clevertec.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
+import ru.clevertec.entity.type.PersonType;
 import ru.clevertec.service.HouseHistoryTenantSrevice;
 
 import java.util.List;
@@ -19,13 +20,9 @@ public class HouseHistoryTenantController {
 
     private HouseHistoryTenantSrevice tenantSrevice;
 
-    @GetMapping("{uuid}")
-    public ResponseEntity<List<ResponsePersonDTO>> findAllTenantsHouse(@PathVariable("uuid") UUID houseUid) {
-        return ResponseEntity.ok(tenantSrevice.findAllTenantsHouse(houseUid));
-    }
-
-    @GetMapping("/owners/{uuid}")
-    public ResponseEntity<List<ResponsePersonDTO>> findAllOwnersHouse(@PathVariable("uuid") UUID houseUid) {
-        return ResponseEntity.ok(tenantSrevice.findAllOwnersHouse(houseUid));
+    @GetMapping
+    public ResponseEntity<List<ResponsePersonDTO>> findAllTenantsHouse(@RequestParam("houseUuid") UUID houseUid,
+                                                                       @RequestParam("type") PersonType type) {
+        return ResponseEntity.ok(tenantSrevice.findAllPersonsTenantsOrPersonsOwnersInHouse(houseUid, type));
     }
 }

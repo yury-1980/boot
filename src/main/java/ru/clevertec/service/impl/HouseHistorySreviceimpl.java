@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
+import ru.clevertec.entity.type.PersonType;
 import ru.clevertec.mapper.HouseMapper;
 import ru.clevertec.repository.HouseHistoryRepository;
 import ru.clevertec.service.HouseHistorySrevice;
@@ -20,24 +21,17 @@ public class HouseHistorySreviceimpl implements HouseHistorySrevice {
     private HouseMapper houseMapper;
 
     /**
-     * Поиск всех домов, где проживал Person.
+     * Поиск всех домов, где проживал Person с параметром TENANT.
+     * Поиск всех домов, которыми владел Person с параметром OWNER.
      *
      * @param personUuid uuid person.
+     * @param type       TENANT или OWNER.
      * @return List<dto> домов.
      */
     @Override
-    public List<ResponseHouseDTO> findAllHousesTenant(UUID personUuid) {
-        return null;
-    }
-
-    /**
-     * Поиск всех домов, которыми владел Person.
-     *
-     * @param personUuid uuid person.
-     * @return List<dto> домов.
-     */
-    @Override
-    public List<ResponseHouseDTO> findAllHousesOwner(UUID personUuid) {
-        return null;
+    public List<ResponseHouseDTO> findAllHousesTenantOrOwner(UUID personUuid, PersonType type) {
+        return houseRepository.findAllByHouseHistoriesPersonUuidAndHouseHistoriesType(personUuid, type).stream()
+                .map(house -> houseMapper.toResponseHouseDTO(house))
+                .toList();
     }
 }
