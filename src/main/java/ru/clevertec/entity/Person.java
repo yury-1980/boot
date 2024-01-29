@@ -16,7 +16,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "person")
-@EqualsAndHashCode(of = {"uuid", "passportNumber"})
 public class Person {
 
     @Id
@@ -53,17 +52,20 @@ public class Person {
 
     @Builder.Default
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "ownersList", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<House> housesOwner = new ArrayList<>();
 
     @Builder.Default
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "house_id", referencedColumnName = "id")
     private House houseResident = new House();
 
-    @ToString.Exclude
     @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<HouseHistory> personHistories = new ArrayList<>();
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.clevertec.dto.requestDTO.RequestHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
+import ru.clevertec.entity.House;
 import ru.clevertec.service.HouseService;
 
 import java.util.List;
@@ -53,12 +54,10 @@ public class HouseController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Void> updateHouse(@RequestBody RequestHouseDTO requestHouseDTO,
-                                            @PathVariable("uuid") UUID uuid) {
-        services.update(requestHouseDTO, uuid);
+    public ResponseEntity<UUID> updateHouse(@RequestBody RequestHouseDTO requestHouseDTO,
+                                             @PathVariable("uuid") UUID uuid) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .build();
+        return ResponseEntity.ok(services.update(requestHouseDTO, uuid));
     }
 
     @PatchMapping

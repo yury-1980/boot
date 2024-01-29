@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.clevertec.dto.requestDTO.RequestPersonDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
+import ru.clevertec.entity.Person;
 import ru.clevertec.service.PersonService;
 
 import java.util.List;
@@ -38,21 +39,17 @@ public class PersonController {
     }
 
     @PostMapping("/{uuid}")
-    public ResponseEntity<Void> createPerson(@RequestBody RequestPersonDTO requestPersonDTO,
+    public ResponseEntity<UUID> createPerson(@RequestBody RequestPersonDTO requestPersonDTO,
                                              @PathVariable("uuid") UUID uuid) {
-        services.create(requestPersonDTO, uuid);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
+        return ResponseEntity.ok(services.create(requestPersonDTO, uuid));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Void> updatePerson(@RequestBody RequestPersonDTO requestPersonDTO,
-                                             @PathVariable("uuid") UUID uuid) {
-        services.update(requestPersonDTO, uuid);
+    public ResponseEntity<UUID> updatePerson(@RequestBody RequestPersonDTO requestPersonDTO,
+                                               @PathVariable("uuid") UUID uuid) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .build();
+        return ResponseEntity.ok(services.update(requestPersonDTO, uuid));
     }
 
     @PatchMapping

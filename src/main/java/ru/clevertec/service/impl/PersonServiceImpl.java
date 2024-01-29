@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
@@ -86,15 +87,18 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     @Transactional
-    public void create(RequestPersonDTO requestPersonDTO, UUID houseUuid) {
-        houseRepository.findByUuid(houseUuid).ifPresent(house -> {
+    public UUID create(RequestPersonDTO requestPersonDTO, UUID houseUuid) {
+
+        House house = houseRepository.findByUuid(houseUuid)
+                .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
+
             Person person = personMapper.toPerson(requestPersonDTO);
             person.setUuid(UUID.randomUUID());
             person.setCreateDate(LocalDateTime.now());
             person.setUpdateDate(person.getCreateDate());
             person.setHouseResident(house);
-            personRepository.save(person);
-        });
+
+        return personRepository.save(person).getUuid();
     }
 
     /**
@@ -105,7 +109,9 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     @Transactional
-    public void update(RequestPersonDTO requestPersonDTO, UUID personUuid) {
+    public UUID update(RequestPersonDTO requestPersonDTO, UUID personUuid) {
+        AtomicReference<Person> newPerson = new AtomicReference<>();
+
         personRepository.findByUuid(personUuid).ifPresent(person -> {
             person.setName(requestPersonDTO.getName());
             person.setSurname(requestPersonDTO.getSurname());
@@ -113,8 +119,11 @@ public class PersonServiceImpl implements PersonService {
             person.setPassportSeries(requestPersonDTO.getPassportSeries());
             person.setPassportNumber(requestPersonDTO.getPassportNumber());
             person.setUpdateDate(LocalDateTime.now());
-            personRepository.save(person);
+
+            newPerson.set(personRepository.save(person));
         });
+
+        return newPerson.get().getUuid();
     }
 
     /**

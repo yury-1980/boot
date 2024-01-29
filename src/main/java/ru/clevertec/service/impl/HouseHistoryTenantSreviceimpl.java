@@ -22,8 +22,9 @@ public class HouseHistoryTenantSreviceimpl implements HouseHistoryTenantSrevice 
 
     /**
      * Поиск всех Persons владеющих или проживающих в этом доме.
+     *
      * @param houseUuid uuid дома.
-     * @param type OWNER или TENANT.
+     * @param type      OWNER или TENANT.
      * @return Список PersonDTO.
      */
     @Override

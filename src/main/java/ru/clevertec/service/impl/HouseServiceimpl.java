@@ -20,6 +20,7 @@ import ru.clevertec.service.HouseService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -119,7 +120,9 @@ public class HouseServiceimpl implements HouseService {
      */
     @Override
     @Transactional
-    public void update(RequestHouseDTO requestHouseDTO, UUID uuid) {
+    public UUID update(RequestHouseDTO requestHouseDTO, UUID uuid) {
+        AtomicReference<House> newHouse = new AtomicReference<>();
+
         houseRepository.findByUuid(uuid).ifPresent(house -> {
             house.setArea(requestHouseDTO.getArea());
             house.setCountry(requestHouseDTO.getCountry());
@@ -127,8 +130,10 @@ public class HouseServiceimpl implements HouseService {
             house.setStreet(requestHouseDTO.getStreet());
             house.setNumber(requestHouseDTO.getNumber());
 
-            houseRepository.save(house);
+            newHouse.set(houseRepository.save(house));
         });
+
+        return newHouse.get().getUuid();
     }
 
     /**

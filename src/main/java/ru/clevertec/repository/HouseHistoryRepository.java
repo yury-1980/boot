@@ -1,8 +1,6 @@
 package ru.clevertec.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.entity.House;
 import ru.clevertec.entity.type.PersonType;
@@ -14,8 +12,6 @@ import java.util.UUID;
 public interface HouseHistoryRepository extends JpaRepository<House, UUID> {
 
     List<House> findAllByHouseHistoriesPersonUuidAndHouseHistoriesType(UUID personUuid, PersonType type);
-
-
 
 
 }
