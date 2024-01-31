@@ -18,7 +18,6 @@ import ru.clevertec.mapper.PersonMapper;
 import ru.clevertec.repository.PersonRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j

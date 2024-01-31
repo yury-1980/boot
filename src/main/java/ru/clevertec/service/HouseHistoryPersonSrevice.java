@@ -6,7 +6,7 @@ import ru.clevertec.entity.type.PersonType;
 import java.util.List;
 import java.util.UUID;
 
-public interface HouseHistoryTenantSrevice {
+public interface HouseHistoryPersonSrevice {
 
     List<ResponsePersonDTO> findAllPersonsTenantsOrPersonsOwnersInHouse(UUID houseUid, PersonType type);
 }

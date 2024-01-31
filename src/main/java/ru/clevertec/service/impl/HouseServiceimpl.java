@@ -109,21 +109,20 @@ public class HouseServiceimpl implements HouseService {
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
         houseOwner.getOwnersList().add(owner);
         houseRepository.save(houseOwner);
-
     }
 
     /**
      * Обновление дома целеком.
      *
      * @param requestHouseDTO Обновлённый RequestHouseDTO.
-     * @param uuid            UUID дома.
+     * @param houseUuid            UUID дома.
      */
     @Override
     @Transactional
-    public UUID update(RequestHouseDTO requestHouseDTO, UUID uuid) {
+    public UUID update(RequestHouseDTO requestHouseDTO, UUID houseUuid) {
         AtomicReference<House> newHouse = new AtomicReference<>();
 
-        houseRepository.findByUuid(uuid).ifPresent(house -> {
+        houseRepository.findByUuid(houseUuid).ifPresent(house -> {
             house.setArea(requestHouseDTO.getArea());
             house.setCountry(requestHouseDTO.getCountry());
             house.setCity(requestHouseDTO.getCity());

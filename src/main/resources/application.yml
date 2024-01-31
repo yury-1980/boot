@@ -15,17 +15,3 @@ spring:
     enabled: true
 Cache:
   capacity: 5
-
-
-#Liquibase:
-#  change-log: /db/changelog/master.yaml
-#  enabled: true
-#Database:
-#  user: postgres
-#  password: postgres
-#  url: jdbc:postgresql://localhost:5432/hibernate
-#  driver: org.postgresql.Driver
-#hibernate:
-#  dialect: org.hibernate.dialect.PostgreSQLDialect
-#  show_sql: true
-#  format_sql: true

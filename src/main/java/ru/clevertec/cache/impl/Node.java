@@ -1,8 +1,10 @@
 package ru.clevertec.cache.impl;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Node<K, V> {
 
     private K key;

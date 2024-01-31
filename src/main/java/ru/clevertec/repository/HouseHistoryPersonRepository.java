@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface HouseHistoryTenantRepository extends JpaRepository<Person, UUID> {
+public interface HouseHistoryPersonRepository extends JpaRepository<Person, UUID> {
 
     List<Person> findAllByPersonHistoriesHouseUuidAndPersonHistoriesType(UUID houseUuid, PersonType personType);
 }

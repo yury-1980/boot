@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
 import ru.clevertec.entity.type.PersonType;
 import ru.clevertec.mapper.PersonMapper;
-import ru.clevertec.repository.HouseHistoryTenantRepository;
-import ru.clevertec.service.HouseHistoryTenantSrevice;
+import ru.clevertec.repository.HouseHistoryPersonRepository;
+import ru.clevertec.service.HouseHistoryPersonSrevice;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,9 +15,9 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 @Transactional(readOnly = true)
-public class HouseHistoryTenantSreviceimpl implements HouseHistoryTenantSrevice {
+public class HouseHistoryPersonSreviceimpl implements HouseHistoryPersonSrevice {
 
-    private HouseHistoryTenantRepository tenantRepository;
+    private HouseHistoryPersonRepository tenantRepository;
     private PersonMapper personMapper;
 
     /**
