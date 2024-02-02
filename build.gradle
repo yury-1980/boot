@@ -22,8 +22,6 @@ repositories {
 ext {
     mapstructVersion = '1.5.5.Final'
     postgresqlVersion = '42.6.0'
-//    junitVersion = '5.9.2'
-//    mockitoVersion = '5.6.0'
     springVersion = '6.1.2'
 }
 
@@ -44,10 +42,6 @@ dependencies {
     testImplementation 'org.liquibase:liquibase-core'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation group: 'org.wiremock', name: 'wiremock-standalone', version:'3.3.1'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-//    testImplementation platform('org.junit:junit-bom:5.9.1')
-//    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 tasks.withType(JavaCompile).configureEach {

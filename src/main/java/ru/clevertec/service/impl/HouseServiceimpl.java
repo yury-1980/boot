@@ -1,6 +1,6 @@
 package ru.clevertec.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,14 +23,14 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class HouseServiceimpl implements HouseService {
 
-    private HouseRepository houseRepository;
-    private PersonRepository personRepository;
-    private HouseMapper houseMapper;
-    private PersonMapper personMapper;
+    private final HouseRepository houseRepository;
+    private final PersonRepository personRepository;
+    private final HouseMapper houseMapper;
+    private final PersonMapper personMapper;
 
     /**
      * Выбор всех House из заданной страницы.
@@ -43,8 +43,9 @@ public class HouseServiceimpl implements HouseService {
     public List<ResponseHouseDTO> findByAll(int pageNumber, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        return houseRepository.findAll(pageRequest).stream()
-                .map(house -> houseMapper.toResponseHouseDTO(house))
+        return houseRepository.findAll(pageRequest)
+                .stream()
+                .map(houseMapper::toResponseHouseDTO)
                 .toList();
     }
 
@@ -58,7 +59,7 @@ public class HouseServiceimpl implements HouseService {
     public ResponseHouseDTO findByUUID(UUID uuid) {
 
         return houseRepository.findByUuid(uuid)
-                .map(house -> houseMapper.toResponseHouseDTO((House) house))
+                .map(houseMapper::toResponseHouseDTO)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
 
     }
@@ -73,8 +74,9 @@ public class HouseServiceimpl implements HouseService {
     public List<ResponsePersonDTO> getPersonsByHouse(UUID houseUuid) {
         houseRepository.findByUuid(houseUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
-        return personRepository.findPersonByHouseResidentUuid(houseUuid).stream()
-                .map(person -> personMapper.toResponsePersonDto(person))
+        return personRepository.findPersonByHouseResidentUuid(houseUuid)
+                .stream()
+                .map(personMapper::toResponsePersonDto)
                 .toList();
     }
 
@@ -91,7 +93,8 @@ public class HouseServiceimpl implements HouseService {
         house.setUuid(UUID.randomUUID());
         house.setCreateDate(LocalDateTime.now());
 
-        return houseRepository.save(house).getUuid();
+        return houseRepository.save(house)
+                .getUuid();
     }
 
     /**
@@ -107,7 +110,8 @@ public class HouseServiceimpl implements HouseService {
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
         Person owner = personRepository.findByUuid(person)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
-        houseOwner.getOwnersList().add(owner);
+        houseOwner.getOwnersList()
+                .add(owner);
         houseRepository.save(houseOwner);
     }
 
@@ -115,24 +119,26 @@ public class HouseServiceimpl implements HouseService {
      * Обновление дома целеком.
      *
      * @param requestHouseDTO Обновлённый RequestHouseDTO.
-     * @param houseUuid            UUID дома.
+     * @param houseUuid       UUID дома.
      */
     @Override
     @Transactional
     public UUID update(RequestHouseDTO requestHouseDTO, UUID houseUuid) {
         AtomicReference<House> newHouse = new AtomicReference<>();
 
-        houseRepository.findByUuid(houseUuid).ifPresent(house -> {
-            house.setArea(requestHouseDTO.getArea());
-            house.setCountry(requestHouseDTO.getCountry());
-            house.setCity(requestHouseDTO.getCity());
-            house.setStreet(requestHouseDTO.getStreet());
-            house.setNumber(requestHouseDTO.getNumber());
+        houseRepository.findByUuid(houseUuid)
+                .ifPresent(house -> {
+                    house.setArea(requestHouseDTO.getArea());
+                    house.setCountry(requestHouseDTO.getCountry());
+                    house.setCity(requestHouseDTO.getCity());
+                    house.setStreet(requestHouseDTO.getStreet());
+                    house.setNumber(requestHouseDTO.getNumber());
 
-            newHouse.set(houseRepository.save(house));
-        });
+                    newHouse.set(houseRepository.save(house));
+                });
 
-        return newHouse.get().getUuid();
+        return newHouse.get()
+                .getUuid();
     }
 
     /**
@@ -172,11 +178,13 @@ public class HouseServiceimpl implements HouseService {
             oldHouse.setNumber(requestHouseDTO.getNumber());
         }
 
-        if (oldHouse.getOwnersList().contains(person)) {
+        if (oldHouse.getOwnersList()
+                .contains(person)) {
             throw EntityAlreadyExists.of(person.getClass());
 
         } else {
-            oldHouse.getOwnersList().add(person);
+            oldHouse.getOwnersList()
+                    .add(person);
         }
 
         return houseMapper.toResponseHouseDTO(houseRepository.save(oldHouse));

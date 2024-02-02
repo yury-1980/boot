@@ -19,3 +19,5 @@ databaseChangeLog:
               path: /db/v0.0/ddl/createTableHouseHistory.sql
         - sqlFile:
             path: /db/v0.0/ddl/createTriggerHouseHistiry.sql
+        - sqlFile:
+            path: db/v0.0/dml/house_history.sql

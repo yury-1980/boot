@@ -55,7 +55,8 @@ public class CachePersonAspect {
 
         } else {
             log.info("Объект взят из базы !");
-            return personRepository.findByUuid(uuid).stream()
+            return personRepository.findByUuid(uuid)
+                    .stream()
                     .peek(person1 -> cache.put(person1.getUuid(), person1))
                     .map(person1 -> personMapper.toResponsePersonDto(person1))
                     .findFirst()
@@ -69,14 +70,15 @@ public class CachePersonAspect {
      * @param joinPoint Точка внедрения кода в метод PersonServiceImpl.create()
      * @return Новый Person.
      */
-    @AfterReturning(value = "execution(* ru.clevertec.service.impl.PersonServiceImpl.create(..))", returning = "result" )
+    @AfterReturning(value = "execution(* ru.clevertec.service.impl.PersonServiceImpl.create(..))", returning = "result")
     public UUID afterCreate(JoinPoint joinPoint, Object result) {
         log.info("Вошли в аспект POST !");
 
         Person newPerson = personRepository.findByUuid((UUID) result)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
         cache.put(newPerson.getUuid(), newPerson);
-        log.info(cache.get(newPerson.getUuid()).toString());
+        log.info(cache.get(newPerson.getUuid())
+                         .toString());
 
         return newPerson.getUuid();
     }
@@ -86,8 +88,8 @@ public class CachePersonAspect {
      *
      * @param joinPoint Точка внедрения кода в метод PersonServiceImpl.update()
      */
-    @AfterReturning(value = "execution(* ru.clevertec.service.impl.PersonServiceImpl.update(..))", returning = "result")
-    public void aroundUpdate(JoinPoint joinPoint, Object result) {
+    @AfterReturning(value = "execution(* ru.clevertec.service.impl.PersonServiceImpl.update(..))")
+    public void aroundUpdate(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         RequestPersonDTO requestPersonDTO = (RequestPersonDTO) args[0];
         UUID uuid = (UUID) args[1];

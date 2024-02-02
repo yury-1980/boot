@@ -1,6 +1,6 @@
 package ru.clevertec.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -34,24 +34,24 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@AllArgsConstructor
+@RequiredArgsConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class HouseServiceimplTest extends PostgreSQLContainerInitializer {
 
     @MockBean
-    private HouseRepository houseRepository;
+    private final HouseRepository houseRepository;
 
     @MockBean
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
     @MockBean
-    private PersonMapper personMapper;
+    private final PersonMapper personMapper;
 
     @InjectMocks
-    private HouseServiceimpl houseService;
+    private final HouseServiceimpl houseService;
 
     @MockBean
-    private HouseMapper houseMapper;
+    private final HouseMapper houseMapper;
 
     @Test
     void shouldReturnPage() {

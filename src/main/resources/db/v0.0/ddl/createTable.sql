@@ -27,7 +27,7 @@ CREATE TABLE if not exists public.person
 CREATE TABLE if not exists public.person_house
 (
     id        BIGSERIAL PRIMARY KEY NOT NULL UNIQUE,
-    person_id BIGINT REFERENCES person (id),
-    house_id  BIGINT REFERENCES house (id)
+    person_id BIGINT REFERENCES person (id) ON DELETE CASCADE,
+    house_id  BIGINT REFERENCES house (id) ON DELETE CASCADE
 );
 

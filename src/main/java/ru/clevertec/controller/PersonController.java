@@ -1,33 +1,32 @@
 package ru.clevertec.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.dto.requestDTO.RequestPersonDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
-import ru.clevertec.entity.Person;
 import ru.clevertec.service.PersonService;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/persons")
 public class PersonController {
 
-    private PersonService services;
+    private final PersonService services;
 
     @GetMapping
-    public ResponseEntity<List<ResponsePersonDTO>> getAllPerson(@RequestParam(defaultValue = "1") int pageNumber,
+    public ResponseEntity<List<ResponsePersonDTO>> getAllPerson(@RequestParam(defaultValue = "0") int pageNumber,
                                                                 @RequestParam(defaultValue = "15") int pageSize) {
         return ResponseEntity.ok(services.findByAll(pageNumber, pageSize));
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ResponsePersonDTO> getPerson(@PathVariable("uuid") UUID uuid) throws Throwable {
+    public ResponseEntity<ResponsePersonDTO> getPerson(@PathVariable("uuid") UUID uuid) {
 
         return ResponseEntity.ok(services.findByUUID(uuid));
     }
@@ -40,14 +39,14 @@ public class PersonController {
 
     @PostMapping("/{uuid}")
     public ResponseEntity<UUID> createPerson(@RequestBody RequestPersonDTO requestPersonDTO,
-                                             @PathVariable("uuid") UUID uuid) {
+                                             @PathVariable("uuid") UUID uuidHouse) {
 
-        return ResponseEntity.ok(services.create(requestPersonDTO, uuid));
+        return ResponseEntity.ok(services.create(requestPersonDTO, uuidHouse));
     }
 
     @PutMapping("/{uuid}")
     public ResponseEntity<UUID> updatePerson(@RequestBody RequestPersonDTO requestPersonDTO,
-                                               @PathVariable("uuid") UUID uuid) {
+                                             @PathVariable("uuid") UUID uuid) {
 
         return ResponseEntity.ok(services.update(requestPersonDTO, uuid));
     }

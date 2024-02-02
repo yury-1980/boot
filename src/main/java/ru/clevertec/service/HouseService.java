@@ -3,7 +3,6 @@ package ru.clevertec.service;
 import ru.clevertec.dto.requestDTO.RequestHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
-import ru.clevertec.entity.House;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package ru.clevertec.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class HouseHistorySreviceimpl implements HouseHistorySrevice {
 
-    private HouseHistoryRepository houseRepository;
-    private HouseMapper houseMapper;
+    private final HouseHistoryRepository houseRepository;
+    private final HouseMapper houseMapper;
 
     /**
      * Поиск всех домов, где проживал Person с параметром TENANT.
@@ -30,8 +30,9 @@ public class HouseHistorySreviceimpl implements HouseHistorySrevice {
      */
     @Override
     public List<ResponseHouseDTO> findAllHousesTenantOrOwner(UUID personUuid, PersonType type) {
-        return houseRepository.findAllByHouseHistoriesPersonUuidAndHouseHistoriesType(personUuid, type).stream()
-                .map(house -> houseMapper.toResponseHouseDTO(house))
+        return houseRepository.findAllByHouseHistoriesPersonUuidAndHouseHistoriesType(personUuid, type)
+                .stream()
+                .map(houseMapper::toResponseHouseDTO)
                 .toList();
     }
 }

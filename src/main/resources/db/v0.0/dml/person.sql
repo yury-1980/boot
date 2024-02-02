@@ -1,6 +1,6 @@
 INSERT INTO public.person (id, uuid, name, surname, sex, passport_series, passport_number, create_date, update_date,
                            house_id)
-VALUES (1, 'd8b6eda1-2ac7-4190-8523-389b3cccffa9', 'John', 'Doe', 'MALE', 'HB', 3, '2024-01-12 23:29:04.595808',
+VALUES (1, 'd8b6eda1-2ac7-4190-8523-389b3cccffa9', 'Masha', 'Petrova', 'FEMALE', 'AA', 7, '2024-01-12 23:29:04.595808',
         '2024-01-12 23:29:04.595808', 1),
        (3, '3cd20b71-6381-4658-9711-f834f1c3373a', 'John', 'Doe', 'MALE', 'HB', 1, '2024-01-13 01:26:12.411684',
         '2024-01-13 01:26:12.411684', 3),

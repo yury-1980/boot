@@ -1,6 +1,6 @@
 package ru.clevertec.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,14 +25,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PersonServiceImpl implements PersonService {
 
-    private HouseRepository houseRepository;
-    private PersonRepository personRepository;
-    private PersonMapper personMapper;
-    private HouseMapper houseMapper;
+    private final HouseRepository houseRepository;
+    private final PersonRepository personRepository;
+    private final PersonMapper personMapper;
+    private final HouseMapper houseMapper;
 
     /**
      * Выбор всех Persons из заданной страницы.
@@ -45,8 +45,9 @@ public class PersonServiceImpl implements PersonService {
     public List<ResponsePersonDTO> findByAll(int pageNumber, int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
 
-        return personRepository.findAll(pageRequest).stream()
-                .map(person -> personMapper.toResponsePersonDto(person))
+        return personRepository.findAll(pageRequest)
+                .stream()
+                .map(personMapper::toResponsePersonDto)
                 .toList();
     }
 
@@ -59,7 +60,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public ResponsePersonDTO findByUUID(UUID uuid) {
         return personRepository.findByUuid(uuid)
-                .map(person -> personMapper.toResponsePersonDto((Person) person))
+                .map(personMapper::toResponsePersonDto)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
     }
 
@@ -74,8 +75,9 @@ public class PersonServiceImpl implements PersonService {
         personRepository.findByUuid(personUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
 
-        return houseRepository.findHousesByOwnersListUuid(personUuid).stream()
-                .map(house -> houseMapper.toResponseHouseDTO(house))
+        return houseRepository.findHousesByOwnersListUuid(personUuid)
+                .stream()
+                .map(houseMapper::toResponseHouseDTO)
                 .toList();
     }
 
@@ -92,13 +94,14 @@ public class PersonServiceImpl implements PersonService {
         House house = houseRepository.findByUuid(houseUuid)
                 .orElseThrow(() -> EntityNotFoundExeption.of(UUID.class));
 
-            Person person = personMapper.toPerson(requestPersonDTO);
-            person.setUuid(UUID.randomUUID());
-            person.setCreateDate(LocalDateTime.now());
-            person.setUpdateDate(person.getCreateDate());
-            person.setHouseResident(house);
+        Person person = personMapper.toPerson(requestPersonDTO);
+        person.setUuid(UUID.randomUUID());
+        person.setCreateDate(LocalDateTime.now());
+        person.setUpdateDate(person.getCreateDate());
+        person.setHouseResident(house);
 
-        return personRepository.save(person).getUuid();
+        return personRepository.save(person)
+                .getUuid();
     }
 
     /**
@@ -112,18 +115,20 @@ public class PersonServiceImpl implements PersonService {
     public UUID update(RequestPersonDTO requestPersonDTO, UUID personUuid) {
         AtomicReference<Person> newPerson = new AtomicReference<>();
 
-        personRepository.findByUuid(personUuid).ifPresent(person -> {
-            person.setName(requestPersonDTO.getName());
-            person.setSurname(requestPersonDTO.getSurname());
-            person.setSex(requestPersonDTO.getSex());
-            person.setPassportSeries(requestPersonDTO.getPassportSeries());
-            person.setPassportNumber(requestPersonDTO.getPassportNumber());
-            person.setUpdateDate(LocalDateTime.now());
+        personRepository.findByUuid(personUuid)
+                .ifPresent(person -> {
+                    person.setName(requestPersonDTO.getName());
+                    person.setSurname(requestPersonDTO.getSurname());
+                    person.setSex(requestPersonDTO.getSex());
+                    person.setPassportSeries(requestPersonDTO.getPassportSeries());
+                    person.setPassportNumber(requestPersonDTO.getPassportNumber());
+                    person.setUpdateDate(LocalDateTime.now());
 
-            newPerson.set(personRepository.save(person));
-        });
+                    newPerson.set(personRepository.save(person));
+                });
 
-        return newPerson.get().getUuid();
+        return newPerson.get()
+                .getUuid();
     }
 
     /**

@@ -55,7 +55,8 @@ public class CacheHouseAspect {
 
         } else {
             log.info("Объект взят из базы !");
-            return houseRepository.findByUuid(uuid).stream()
+            return houseRepository.findByUuid(uuid)
+                    .stream()
                     .peek(house1 -> cache.put(house1.getUuid(), house1))
                     .map(house1 -> houseMapper.toResponseHouseDTO(house1))
                     .findFirst()
@@ -78,7 +79,8 @@ public class CacheHouseAspect {
         house.setCreateDate(LocalDateTime.now());
 
         cache.put(house.getUuid(), house);
-        log.info(cache.get(house.getUuid()).toString());
+        log.info(cache.get(house.getUuid())
+                         .toString());
 
         return house.getUuid();
     }

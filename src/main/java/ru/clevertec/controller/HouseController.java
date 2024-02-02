@@ -1,24 +1,23 @@
 package ru.clevertec.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.clevertec.dto.requestDTO.RequestHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponseHouseDTO;
 import ru.clevertec.dto.responseDTO.ResponsePersonDTO;
-import ru.clevertec.entity.House;
 import ru.clevertec.service.HouseService;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/houses")
 public class HouseController {
 
-    private HouseService services;
+    private final HouseService services;
 
     @GetMapping
     public ResponseEntity<List<ResponseHouseDTO>> getAllHouse(@RequestParam(defaultValue = "0") int pageNumber,
@@ -27,7 +26,7 @@ public class HouseController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ResponseHouseDTO> getHouse(@PathVariable("uuid") UUID uuid) throws Throwable {
+    public ResponseEntity<ResponseHouseDTO> getHouse(@PathVariable("uuid") UUID uuid) {
 
         return ResponseEntity.ok(services.findByUUID(uuid));
     }
@@ -55,7 +54,7 @@ public class HouseController {
 
     @PutMapping("/{uuid}")
     public ResponseEntity<UUID> updateHouse(@RequestBody RequestHouseDTO requestHouseDTO,
-                                             @PathVariable("uuid") UUID uuid) {
+                                            @PathVariable("uuid") UUID uuid) {
 
         return ResponseEntity.ok(services.update(requestHouseDTO, uuid));
     }

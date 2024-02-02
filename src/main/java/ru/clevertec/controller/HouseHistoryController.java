@@ -1,6 +1,6 @@
 package ru.clevertec.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/v1/houses")
 public class HouseHistoryController {
 
-    private HouseHistorySrevice houseSrevice;
+    private final HouseHistorySrevice houseSrevice;
 
     @GetMapping
     public ResponseEntity<List<ResponseHouseDTO>> findAllHousesTenant(@RequestParam("personUuid") UUID personUuid,

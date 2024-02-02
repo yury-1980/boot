@@ -1,6 +1,6 @@
 package ru.clevertec.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,15 +20,15 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@AllArgsConstructor
+@RequiredArgsConstructor
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 class HouseHistorySreviceimplTest extends PostgreSQLContainerInitializer {
 
     @MockBean
-    private HouseHistoryRepository historyRepository;
+    private final HouseHistoryRepository historyRepository;
 
     @InjectMocks
-    private HouseHistorySreviceimpl historySrevice;
+    private final HouseHistorySreviceimpl historySrevice;
 
     @Test
     void findAllHousesTenantOrOwner() {
