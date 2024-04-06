@@ -3,17 +3,19 @@ package ru.clevertec.exeption;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExeptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<MessageResponse> hendlerExeption(EntityNotFoundExeption entityNotFoundExeption) {
+    @ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No such Object")
+    public void hendlerExeption(EntityNotFoundExeption entityNotFoundExeption) {
         MessageResponse messageResponse = new MessageResponse();
         messageResponse.setInfo(entityNotFoundExeption.getMessage());
 
-        return new ResponseEntity<>(messageResponse, HttpStatus.NOT_FOUND);
+//        return new ResponseEntity<>(messageResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler
